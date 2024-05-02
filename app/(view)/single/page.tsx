@@ -46,7 +46,7 @@ function SingleView() {
           Search Pokemon
         </button>
       </form>
-      {getPokemon.data && <PokemonRow pokemon={getPokemon.data} />}
+      {getPokemon.data && <PokemonRow key={getPokemon.data.id} pokemon={getPokemon.data} />}
     </div>
   );
 }

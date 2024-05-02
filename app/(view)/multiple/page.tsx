@@ -48,7 +48,7 @@ function MultipleView() {
       </form>
       {pokemonData.length > 0 ? (
         pokemonData.map((pokemon) => (
-          <PokemonRow  pokemon={pokemon} />
+          <PokemonRow key={pokemon.id}  pokemon={pokemon} />
         ))
       ) : (
         <p className="text-red-500">No Pokemon found for the provided names.</p>
