@@ -1,7 +1,7 @@
 import {procedure, router} from "../trpc"
 import {z} from "zod";
 import { PrismaClient } from "@prisma/client";
-import { Spirax } from "next/font/google";
+
 
 const prisma = new PrismaClient();
 
@@ -11,12 +11,12 @@ const GetPokemonByNameInput = z.object({
 
 export const PokemonRouter = router({
     getAllPokemon: procedure.query(async () => {
-        return await prisma.Pokemon.findMany();
+        return await prisma.pokemon.findMany();
     }),
     getPokemon:procedure.input(z.object({name:z.string()}))
     .query(async (opts) => {
         const {input} = opts;
-        const pokemon = await prisma.Pokemon.findFirst({
+        const pokemon = await prisma.pokemon.findFirst({
             where:{
                 name:input.name
             }
@@ -27,7 +27,7 @@ export const PokemonRouter = router({
     getMultiplePokemons:procedure.input(z.object({names:z.array(z.string())}))
     .query(async (opts) => {
         const {input} = opts;
-        const pokemons = await prisma.Pokemon.findMany({
+        const pokemons = await prisma.pokemon.findMany({
             where:{
                 name:{
                     in:input.names
@@ -40,13 +40,26 @@ export const PokemonRouter = router({
     addPokemon:procedure.input(z.object({name:z.string(),types:z.array(z.string()),sprite:z.string()}))
     .mutation(async (opts) => {
         const {input} = opts;
-        await prisma.Pokemon.create({
+        await prisma.pokemon.create({
             data:{
                 name:input.name,
                 types:input.types,
                 sprite:input.sprite
             }
         })
+    }),
+    deletePokemon:procedure.mutation(async () => {
+        try {
+            const deletePokemon = await prisma.pokemon.deleteMany({where:{
+                name:""
+            }});
+
+             return deletePokemon;
+        } catch (error) {
+            return error
+        }
+        
+        
     })
 })
 export type AppRouter = typeof PokemonRouter;

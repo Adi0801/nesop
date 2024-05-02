@@ -1,13 +1,13 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Pokemon } from '@/app/types/Pokemon';
+import { PokemonType } from '@/app/types/PokemonType';
 import { trpc } from '@/app/_trpc/client';
 import { PokemonRow } from '@/app/Components/PokemonRow';
 
 function MultipleView() {
   const [names, setNames] = useState<string[]>([]);
-  const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+  const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
   const getPokemon = trpc.getPoke.getMultiplePokemons.useQuery({ names });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +48,7 @@ function MultipleView() {
       </form>
       {pokemonData.length > 0 ? (
         pokemonData.map((pokemon) => (
-          <PokemonRow key={pokemon.id} pokemon={pokemon} />
+          <PokemonRow  pokemon={pokemon} />
         ))
       ) : (
         <p className="text-red-500">No Pokemon found for the provided names.</p>

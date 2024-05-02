@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { trpc } from "./_trpc/client";
 import Link from "next/link";
 
-import {Pokemon} from "./types/Pokemon"
+import {PokemonType} from "./types/PokemonType"
 
 import { PokemonRow } from "./Components/PokemonRow";
 
@@ -13,40 +13,39 @@ export default function Home() {
   const [types, setTypes] = useState<string[]>([]);
   const [sprite, setSprite] = useState<string>("");
 
-  const[pokemons, setPokemons]  = useState<Pokemon[]>([]);
+  const[pokemons, setPokemons]  = useState<PokemonType[]>([]);
 
   const addPoke = trpc.getPoke.addPokemon.useMutation();
-  const getPoke = trpc.getPoke.getAllPokemon.useQuery();
-  
+  const getPokemon = trpc.getPoke.getAllPokemon.useQuery();
 
-   useEffect(() => {
-    setPokemons(getPoke.data);
-   }, [])
+  // const deletePokemon = trpc.getPoke.deletePokemon.useMutation();
+  // deletePokemon.mutate();
+ 
+  const fetchPokemons = async () => {
+    setPokemons(getPokemon.data || []);
+  };
 
+  // Use useEffect to fetch Pokemon data after component mounts and whenever a new Pokemon is added
+  useEffect(() => {
+    fetchPokemons();
+  }, []);
 
   //  console.log(getPoke.data);
    
-
-  const poke = {
-    id: 1,
-    name: "Balbasaur",
-    types: ["electric", "grass"],
-    sprite: "url"
-  }
-
   const handleSubmit = (e:any) => {
     e.preventDefault();
     addPoke.mutate({ name, types, sprite });
     setName("");
     setTypes([]);
     setSprite("");
+    fetchPokemons();
   };
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
-  {getPoke.data && (
+  {getPokemon.data && (
     <section className="col-span-full md:col-span-1 flex flex-col items-center">
-      {getPoke.data.map((pokemon: Pokemon) => (
+      {getPokemon.data.map((pokemon: PokemonType) => (
         <PokemonRow key={pokemon.id} pokemon={pokemon} />
       ))}
     </section>

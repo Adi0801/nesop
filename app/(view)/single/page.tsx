@@ -1,13 +1,13 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Pokemon } from '@/app/types/Pokemon';
+import { PokemonType } from '@/app/types/PokemonType';
 import { trpc } from '@/app/_trpc/client';
 import { PokemonRow } from '@/app/Components/PokemonRow';
 
 function SingleView() {
   const [name, setName] = useState('');
-  const [pokemonData, setPokemonData] = useState<Pokemon | undefined>();
+  const [pokemonData, setPokemonData] = useState<PokemonType>();
   const getPokemon = trpc.getPoke.getPokemon.useQuery({ name });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +18,8 @@ function SingleView() {
     e.preventDefault();
     console.log('Submitted Name:', name);
     
-    const data = await getPokemon.data;
-    setPokemonData(data);
+    // const data = await getPokemon.data;
+    // setPokemonData(data);
     setName('');
   };
 
@@ -46,7 +46,7 @@ function SingleView() {
           Search Pokemon
         </button>
       </form>
-      {pokemonData && <PokemonRow pokemon={pokemonData} />}
+      {getPokemon.data && <PokemonRow pokemon={getPokemon.data} />}
     </div>
   );
 }
