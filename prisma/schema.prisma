@@ -10,9 +10,8 @@ generator client {
  
 datasource db {
   provider = "postgresql"
-  // Uses connection pooling
-  url = env("POSTGRES_PRISMA_URL")
-  
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 model Pokemon {
   id      Int      @id @default(autoincrement())
