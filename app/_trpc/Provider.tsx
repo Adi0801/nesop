@@ -4,7 +4,9 @@ import React, { useState } from 'react'
 import {trpc} from "./client";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/react-query';
-import {configDotenv} from "dotenv";
+
+
+import { absoluteUrl } from '@/lib/utils';
 
 
 function Provider({children}:{children:React.ReactNode}) {
@@ -16,7 +18,7 @@ function Provider({children}:{children:React.ReactNode}) {
         trpc.createClient({
             links: [
                 httpBatchLink({
-                    url:`http://localhost:${port?? 3000}/api/trpc`
+                    url:absoluteUrl("/api/trpc")
                 })
             ]
         })
