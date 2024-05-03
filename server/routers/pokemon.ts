@@ -5,12 +5,17 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const GetPokemonByNameInput = z.object({
-    name: z.string(),
-  });
+
 
 export const PokemonRouter = router({
     getAllPokemon: procedure.query(async () => {
+        try {
+            const pokemons = await prisma.pokemon.findMany();
+            return pokemons;
+        } catch (error) {
+            console.log("Error" + error);
+            return error;
+        }
         return await prisma.pokemon.findMany();
     }),
     getPokemon:procedure.input(z.object({name:z.string()}))
