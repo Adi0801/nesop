@@ -5,6 +5,8 @@ import { PokemonType } from '@/app/types/PokemonType';
 import { trpc } from '@/app/_trpc/client';
 import { PokemonRow } from '@/app/Components/PokemonRow';
 
+import { Typography, TextField, Button } from '@mui/material';
+
 function MultipleView() {
   const [names, setNames] = useState<string[]>([]);
   const [pokemonData, setPokemonData] = useState<PokemonType[]>([]);
@@ -25,33 +27,36 @@ function MultipleView() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Search Pokemon</h1>
+      <Typography variant="h3" component="h1" className="text-3xl font-bold mb-4">Search Pokemon</Typography>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="names" className="block mb-1">Names (comma separated):</label>
-          <input
+          <TextField
             type="text"
             id="names"
             name="names"
             value={names.join(', ')}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded shadow-sm focus:outline-none focus:border-blue-500"
+            fullWidth
+            variant="outlined"
             placeholder="Enter Pokemon Names (comma separated)"
           />
         </div>
-        <button
+        <Button
           type="submit"
-          className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+          variant="contained"
+          color="primary"
+          fullWidth
         >
           Search Pokemon
-        </button>
+        </Button>
       </form>
       {pokemonData.length > 0 ? (
         pokemonData.map((pokemon) => (
-          <PokemonRow key={pokemon.id}  pokemon={pokemon} />
+          <PokemonRow key={pokemon.id} pokemon={pokemon} />
         ))
       ) : (
-        <p className="text-red-500">No Pokemon found for the provided names.</p>
+        <Typography variant="body1" className="text-red-500">No Pokemon found for the provided names.</Typography>
       )}
     </div>
   );
