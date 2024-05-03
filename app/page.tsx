@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { trpc } from "./_trpc/client";
 import Link from "next/link";
+import {z} from "zod";
 
 import { Grid, TextField, Button } from '@mui/material';
 
@@ -65,6 +66,7 @@ export default function Home() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             variant="outlined"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             type="text"
@@ -75,6 +77,7 @@ export default function Home() {
               setTypes(newItems);
             }}
             variant="outlined"
+            inputProps={{ minLength: 3 }}
           />
           <TextField
             type="text"
