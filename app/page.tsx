@@ -13,7 +13,7 @@ export default function Home() {
   const [types, setTypes] = useState<string[]>([]);
   const [sprite, setSprite] = useState<string>("");
 
-  const[pokemons, setPokemons]  = useState<PokemonType[]>([]);
+  const[pokemons, setPokemons]  = useState<PokemonType[]>();
 
   const addPoke = trpc.getPoke.addPokemon.useMutation();
   const getPokemon = trpc.getPoke.getAllPokemon.useQuery();
@@ -22,13 +22,14 @@ export default function Home() {
   // deletePokemon.mutate();
  
   const fetchPokemons = async () => {
-    setPokemons(getPokemon.data || []);
+    const data = await getPokemon.data;
+    setPokemons(data);
   };
 
   // Use useEffect to fetch Pokemon data after component mounts and whenever a new Pokemon is added
-  useEffect(() => {
-    fetchPokemons();
-  }, []);
+  // useEffect(() => {
+  //   fetchPokemons();
+  // }, []);
 
   //  console.log(getPoke.data);
    
@@ -43,13 +44,9 @@ export default function Home() {
 
   return (
     <main className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
-  {getPokemon.data && (
-    <section className="col-span-full md:col-span-1 flex flex-col items-center">
-      {getPokemon.data.map((pokemon: PokemonType) => (
-        <PokemonRow key={pokemon.id} pokemon={pokemon} />
-      ))}
-    </section>
-  )}
+    {getPokemon.data && getPokemon.data.map(pokemon => (
+      <PokemonRow key={pokemon.id} pokemon={pokemon}/>
+    ))}
 
   <form onSubmit={handleSubmit} className="col-span-full md:col-span-1 flex flex-col space-y-4">
     <input

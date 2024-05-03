@@ -1,6 +1,7 @@
 import {procedure, router} from "../trpc"
 import {z} from "zod";
 import { PrismaClient } from "@prisma/client";
+import { PokemonType } from "@/app/types/PokemonType";
 
 
 const prisma = new PrismaClient();
@@ -9,25 +10,25 @@ const prisma = new PrismaClient();
 
 export const PokemonRouter = router({
     getAllPokemon: procedure.query(async () => {
-        try {
+    
             const pokemons = await prisma.pokemon.findMany();
             return pokemons;
-        } catch (error) {
-            console.log("Error" + error);
-            return error;
-        }
-        return await prisma.pokemon.findMany();
+        
+        
     }),
     getPokemon:procedure.input(z.object({name:z.string()}))
     .query(async (opts) => {
-        const {input} = opts;
-        const pokemon = await prisma.pokemon.findFirst({
+        
+            const {input} = opts;
+            const pokemon = await prisma.pokemon.findFirst({
             where:{
                 name:input.name
             }
         })
         return pokemon;
 
+       
+        
     }),
     getMultiplePokemons:procedure.input(z.object({names:z.array(z.string())}))
     .query(async (opts) => {
